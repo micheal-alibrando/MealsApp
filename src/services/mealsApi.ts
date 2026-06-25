@@ -1,7 +1,7 @@
 import { apiRequest } from './client'
 
 export async function getAllMeals() {
-  return apiRequest('/search.php?s=')
+  return apiRequest('/filter.php?a=Italian')
 }
 
 export async function getMealById(id: string) {

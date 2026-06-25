@@ -1,25 +1,25 @@
-import React from 'react'
-import { Pressable, Text, TextInput, View } from 'react-native'
-import { validateLogin } from '../services/auth'
+import React from "react";
+import { Pressable, Text, TextInput, View } from "react-native";
+import { validateLogin } from "../services/auth";
 
-export function AuthScreen() {
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
-  const [error, setError] = React.useState<string | null>(null)
+export default function AuthScreen({ navigation }: { navigation: any }) {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState<string | null>(null);
 
   function loginFunction() {
     if (validateLogin(email, password)) {
-      alert('Login successful!')
+      navigation.navigate("Home");
     } else {
-      setError('Invalid email or password')
+      setError("Invalid email or password");
     }
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <TextInput placeholder='Email' value={email} onChangeText={setEmail} />
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <TextInput placeholder="Email" value={email} onChangeText={setEmail} />
       <TextInput
-        placeholder='Password'
+        placeholder="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -27,7 +27,7 @@ export function AuthScreen() {
       <Pressable onPress={loginFunction}>
         <Text>Log In</Text>
       </Pressable>
-      {error && <Text style={{ color: 'red' }}>{error}</Text>}
+      {error && <Text style={{ color: "red" }}>{error}</Text>}
     </View>
-  )
+  );
 }
