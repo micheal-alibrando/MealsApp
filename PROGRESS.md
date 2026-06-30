@@ -1,8 +1,8 @@
 # Progress - Italian Meals App
 
-**Studente:** Nome Cognome  
-**Repo:** https://github.com/tuo-utente/italian-meals-app  
-**Ultimo aggiornamento:** YYYY-MM-DD
+**Studente:** Micheal Alibranod  
+**Repo:** https://github.com/micheal-alibrando/MealsApp
+**Ultimo aggiornamento:** 2026-06-30
 
 ## Schermate implementate
 
@@ -20,7 +20,7 @@
 
 ## Google Doc (lab 13–22)
 
-**Link:** https://docs.google.com/document/d/1RXdJJVh4GlMYAngYksM9MLcUvdgkYoO3lizdgMCK36Y/edit?tab=t.0#heading=h.wu29v8o1b6lm
+**Link:** https://docs.google.com/document/d/1RXdJJVh4GlMYAngYksM9MLcUvdgkYoO3lizdgMCK36Y/edit?tab=t.r1a4okuds53
 
 Uno screenshot per lab **13–22** (come avete fatto per i lab **01–11** alla verifica intermedia).
 
