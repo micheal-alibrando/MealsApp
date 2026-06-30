@@ -5,7 +5,6 @@ import {
   View,
   FlatList,
   ActivityIndicator,
-  TextInput,
 } from "react-native";
 import { getAllMeals } from "../services/mealsApi";
 import MealCard from "../components/MealCard";
@@ -19,7 +18,7 @@ interface MealSummary {
   strMealThumb: string;
 }
 
-export default function MealsScreen({ navigation }: { navigation: any }) {
+export default function FavoritesScreen({ navigation }: { navigation: any }) {
   const [state, setState] = React.useState<{
     status: "idle" | "loading" | "success" | "error";
     items: MealSummary[];
@@ -33,13 +32,17 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
   const [favoriteIds, setFavoriteIds] = React.useState<string[]>([]);
   const [favoritesLoaded, setFavoritesLoaded] = React.useState(false);
 
-  const [search, setSearch] = React.useState("");
-
-  async function loadMeals() {
+  async function loadFavoriteMeals(ids: string[]) {
     setState({ status: "loading", items: [], message: "" });
+
     try {
       const data = await getAllMeals();
-      setState({ status: "success", items: data, message: "" });
+
+      const filtered = data.filter((meal: MealSummary) =>
+        ids.includes(meal.idMeal),
+      );
+
+      setState({ status: "success", items: filtered, message: "" });
     } catch {
       setState({
         status: "error",
@@ -50,7 +53,12 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
   }
 
   React.useEffect(() => {
-    loadMeals();
+    loadFavoriteIds()
+      .then((ids) => {
+        setFavoriteIds(ids);
+        return loadFavoriteMeals(ids);
+      })
+      .finally(() => setFavoritesLoaded(true));
   }, []);
 
   function toggleFavorite(idMeal: string) {
@@ -60,19 +68,12 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
         : [...current, idMeal];
 
       void saveFavoriteIds(next);
+
+      loadFavoriteMeals(next);
+
       return next;
     });
   }
-
-  React.useEffect(() => {
-    loadFavoriteIds()
-      .then(setFavoriteIds)
-      .finally(() => setFavoritesLoaded(true));
-  }, []);
-
-  const filteredMeals = state.items.filter((meal) =>
-    meal.strMeal.toLowerCase().includes(search.toLowerCase()),
-  );
 
   if (!favoritesLoaded || state.status === "loading") {
     return (
@@ -87,7 +88,7 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
     return (
       <View>
         <Text>{state.message}</Text>
-        <Pressable onPress={loadMeals}>
+        <Pressable onPress={() => loadFavoriteMeals(favoriteIds)}>
           <Text>Retry</Text>
         </Pressable>
       </View>
@@ -101,41 +102,31 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
         <Text style={styles.buttonBackText}>Indietro</Text>
       </Pressable>
 
-      <Text style={styles.title}>Piatti Italiani</Text>
+      <Text style={styles.title}>Preferiti</Text>
 
-      <TextInput
-        placeholder="Cerca un piatto..."
-        value={search}
-        onChangeText={setSearch}
-        style={{
-          borderWidth: 1,
-          borderColor: "#ccc",
-          borderRadius: 10,
-          padding: 10,
-          marginBottom: 12,
-        }}
-      />
-
-      <FlatList
-        data={filteredMeals}
-        renderItem={({ item }) => (
-          <View style={{ width: "48%" }}>
-            <MealCard
-              meal={item}
-              toggleFavorite={toggleFavorite}
-              isFavorite={favoriteIds.includes(item.idMeal)}
-              onPress={() =>
-                navigation.navigate("details", { id: item.idMeal })
-              }
-            />
-          </View>
-        )}
-        keyExtractor={(item) => item.idMeal}
-        numColumns={2}
-        columnWrapperStyle={styles.rowMeals}
-        contentContainerStyle={styles.listMeals}
-        ListEmptyComponent={<Text>Nessun risultato</Text>}
-      />
+      {state.items.length === 0 ? (
+        <Text>Nessun preferito</Text>
+      ) : (
+        <FlatList
+          data={state.items}
+          renderItem={({ item }) => (
+            <View style={{ width: "48%" }}>
+              <MealCard
+                meal={item}
+                toggleFavorite={toggleFavorite}
+                isFavorite={true}
+                onPress={() =>
+                  navigation.navigate("details", { id: item.idMeal })
+                }
+              />
+            </View>
+          )}
+          keyExtractor={(item) => item.idMeal}
+          numColumns={2}
+          columnWrapperStyle={styles.rowMeals}
+          contentContainerStyle={styles.listMeals}
+        />
+      )}
     </View>
   );
 }

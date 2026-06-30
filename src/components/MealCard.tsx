@@ -7,21 +7,26 @@ export default function MealCard({
   meal,
   toggleFavorite,
   isFavorite,
+  onPress,
 }: {
   meal: any;
   toggleFavorite: Function;
   isFavorite: boolean;
+  onPress: () => void;
 }) {
   return (
-    <View style={styles.mealCard}>
+    <View style={styles.cardMeals}>
       <Pressable
         style={{
           position: "absolute",
           top: 15,
           right: 15,
-          alignSelf: "flex-end",
+          zIndex: 1,
         }}
-        onPress={() => toggleFavorite(meal.idMeal)}
+        onPress={(e) => {
+          e.stopPropagation();
+          toggleFavorite(meal.idMeal);
+        }}
       >
         {isFavorite ? (
           <MaterialIcons name="favorite" size={24} color="red" />
@@ -29,26 +34,25 @@ export default function MealCard({
           <MaterialIcons name="favorite-outline" size={24} color="black" />
         )}
       </Pressable>
-      <Image
-        source={{ uri: meal.strMealThumb }}
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: "100%",
-          alignSelf: "center",
-        }}
-      />
-      <View style={{ flex: 1, gap: 8 }}>
-        <Text
+
+      <Pressable onPress={onPress}>
+        <Image
+          source={{ uri: meal.strMealThumb }}
           style={{
-            fontSize: 18,
-            fontWeight: "600",
+            width: 100,
+            height: 100,
+            borderRadius: 50,
+            alignSelf: "center",
           }}
-        >
-          {meal.strMeal}
-        </Text>
-        <Text style={styles.mealTag}>{meal.strArea}</Text>
-      </View>
+        />
+
+        <View style={{ flex: 1, gap: 8 }}>
+          <Text style={{ fontSize: 18, fontWeight: "600" }}>
+            {meal.strMeal}
+          </Text>
+          <Text style={styles.tagMeals}>{meal.strArea}</Text>
+        </View>
+      </Pressable>
     </View>
   );
 }
