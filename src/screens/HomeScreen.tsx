@@ -2,8 +2,9 @@ import React from "react";
 import { View, Text, Pressable } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import Avatar from "../components/Avatar";
-import { styles } from "../style";
+import { styles } from "../theme/styles";
 import { MaterialIcons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen({ navigation }: any) {
   const { user } = useAuth();
@@ -11,7 +12,7 @@ export default function HomeScreen({ navigation }: any) {
   const avatarUri = `https://ui-avatars.com/api/?name=${user?.email}`;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Pressable onPress={() => navigation.navigate("profile")}>
           <Avatar uri={avatarUri} size={64} />
@@ -45,6 +46,6 @@ export default function HomeScreen({ navigation }: any) {
           <Text style={styles.buttonSecondaryText}>Vai ai piatti</Text>
         </Pressable>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

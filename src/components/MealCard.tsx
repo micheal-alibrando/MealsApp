@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Image, Text, Pressable } from "react-native";
-import { styles } from "../style";
+import { styles } from "../theme/styles";
 import { MaterialIcons } from "@expo/vector-icons";
 
 export default function MealCard({

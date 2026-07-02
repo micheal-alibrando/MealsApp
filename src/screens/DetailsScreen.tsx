@@ -9,7 +9,8 @@ import {
 } from "react-native";
 import { getMealById } from "../services/mealsApi";
 import { MaterialIcons } from "@expo/vector-icons";
-import { styles } from "../style";
+import { styles } from "../theme/styles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function DetailsScreen({ navigation, route }: any) {
   const id = route.params?.id;
@@ -49,23 +50,23 @@ export default function DetailsScreen({ navigation, route }: any) {
 
   if (loading) {
     return (
-      <View style={styles.center}>
+      <SafeAreaView style={styles.center}>
         <ActivityIndicator />
         <Text>Caricamento...</Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
   if (!meal) {
     return (
-      <View style={styles.center}>
+      <SafeAreaView style={styles.center}>
         <Text>Meal non trovato</Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View>
         <Pressable
           style={styles.buttonBack}
@@ -94,6 +95,6 @@ export default function DetailsScreen({ navigation, route }: any) {
         <Text style={styles.section}>Istruzioni</Text>
         <Text>{meal.strInstructions}</Text>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }

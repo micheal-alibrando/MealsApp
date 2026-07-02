@@ -9,17 +9,21 @@ import {
 } from "react-native";
 import { getAllMeals } from "../services/mealsApi";
 import MealCard from "../components/MealCard";
-import { styles } from "../style";
+import { styles } from "../theme/styles";
 import { loadFavoriteIds, saveFavoriteIds } from "../services/storage";
 import { MaterialIcons } from "@expo/vector-icons";
-
-interface MealSummary {
-  idMeal: string;
-  strMeal: string;
-  strMealThumb: string;
-}
+import { SafeAreaView } from "react-native-safe-area-context";
+import { MealSummary } from "../models/meal";
+import { useWindowDimensions } from "react-native";
+import { breakpoints } from "../theme/global";
+import Error from "../components/Error";
+import Loading from "../components/Loading";
 
 export default function MealsScreen({ navigation }: { navigation: any }) {
+  const { width } = useWindowDimensions();
+
+  const columns = width >= breakpoints.md ? 2 : 1;
+
   const [state, setState] = React.useState<{
     status: "idle" | "loading" | "success" | "error";
     items: MealSummary[];
@@ -75,27 +79,15 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
   );
 
   if (!favoritesLoaded || state.status === "loading") {
-    return (
-      <View>
-        <ActivityIndicator />
-        <Text>Caricamento...</Text>
-      </View>
-    );
+    return <Loading />;
   }
 
   if (state.status === "error") {
-    return (
-      <View>
-        <Text>{state.message}</Text>
-        <Pressable onPress={loadMeals}>
-          <Text>Retry</Text>
-        </Pressable>
-      </View>
-    );
+    return <Error error={state.message} onPress={loadMeals} />;
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Pressable style={styles.buttonBack} onPress={() => navigation.goBack()}>
         <MaterialIcons name="arrow-back" size={24} />
         <Text style={styles.buttonBackText}>Indietro</Text>
@@ -119,7 +111,7 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
       <FlatList
         data={filteredMeals}
         renderItem={({ item }) => (
-          <View style={{ width: "48%" }}>
+          <View style={columns === 1 ? { flex: 1 } : { width: "48%" }}>
             <MealCard
               meal={item}
               toggleFavorite={toggleFavorite}
@@ -131,11 +123,11 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
           </View>
         )}
         keyExtractor={(item) => item.idMeal}
-        numColumns={2}
-        columnWrapperStyle={styles.rowMeals}
-        contentContainerStyle={styles.listMeals}
+        numColumns={columns}
+        columnWrapperStyle={columns === 2 && styles.rowMeals}
+        contentContainerStyle={columns === 2 && styles.listMeals}
         ListEmptyComponent={<Text>Nessun risultato</Text>}
       />
-    </View>
+    </SafeAreaView>
   );
 }

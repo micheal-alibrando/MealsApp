@@ -8,17 +8,18 @@ import {
 } from "react-native";
 import { getAllMeals } from "../services/mealsApi";
 import MealCard from "../components/MealCard";
-import { styles } from "../style";
+import { styles } from "../theme/styles";
 import { loadFavoriteIds, saveFavoriteIds } from "../services/storage";
 import { MaterialIcons } from "@expo/vector-icons";
-
-interface MealSummary {
-  idMeal: string;
-  strMeal: string;
-  strMealThumb: string;
-}
+import { SafeAreaView } from "react-native-safe-area-context";
+import { MealSummary } from "../models/meal";
+import { useWindowDimensions } from "react-native";
+import { breakpoints } from "../theme/global";
 
 export default function FavoritesScreen({ navigation }: { navigation: any }) {
+  const { width } = useWindowDimensions();
+
+  const columns = width >= breakpoints.md ? 2 : 1;
   const [state, setState] = React.useState<{
     status: "idle" | "loading" | "success" | "error";
     items: MealSummary[];
@@ -77,26 +78,26 @@ export default function FavoritesScreen({ navigation }: { navigation: any }) {
 
   if (!favoritesLoaded || state.status === "loading") {
     return (
-      <View>
+      <SafeAreaView>
         <ActivityIndicator />
         <Text>Caricamento...</Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
   if (state.status === "error") {
     return (
-      <View>
+      <SafeAreaView>
         <Text>{state.message}</Text>
         <Pressable onPress={() => loadFavoriteMeals(favoriteIds)}>
           <Text>Retry</Text>
         </Pressable>
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Pressable style={styles.buttonBack} onPress={() => navigation.goBack()}>
         <MaterialIcons name="arrow-back" size={24} />
         <Text style={styles.buttonBackText}>Indietro</Text>
@@ -110,7 +111,7 @@ export default function FavoritesScreen({ navigation }: { navigation: any }) {
         <FlatList
           data={state.items}
           renderItem={({ item }) => (
-            <View style={{ width: "48%" }}>
+            <View style={columns === 1 ? { flex: 1 } : { width: "48%" }}>
               <MealCard
                 meal={item}
                 toggleFavorite={toggleFavorite}
@@ -122,11 +123,11 @@ export default function FavoritesScreen({ navigation }: { navigation: any }) {
             </View>
           )}
           keyExtractor={(item) => item.idMeal}
-          numColumns={2}
-          columnWrapperStyle={styles.rowMeals}
-          contentContainerStyle={styles.listMeals}
+          numColumns={columns}
+          columnWrapperStyle={columns === 2 && styles.rowMeals}
+          contentContainerStyle={columns === 2 && styles.listMeals}
         />
       )}
-    </View>
+    </SafeAreaView>
   );
 }

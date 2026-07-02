@@ -2,7 +2,7 @@
 
 **Studente:** Micheal Alibranod  
 **Repo:** https://github.com/micheal-alibrando/MealsApp
-**Ultimo aggiornamento:** 2026-06-30
+**Ultimo aggiornamento:** 2026-07-02
 
 ## Schermate implementate
 

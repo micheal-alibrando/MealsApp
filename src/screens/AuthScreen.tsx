@@ -3,7 +3,8 @@ import { View, Text, TextInput, Pressable, Image } from "react-native";
 import { validateLogin } from "../services/auth";
 import { useAuth } from "../context/AuthContext";
 import { loadUser } from "../services/storage";
-import { styles } from "../style";
+import { styles } from "../theme/styles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AuthScreen({ navigation }: { navigation: any }) {
   const { login } = useAuth();
@@ -34,14 +35,14 @@ export default function AuthScreen({ navigation }: { navigation: any }) {
 
     if (validateLogin(email, password)) {
       login({ email });
-      navigation.navigate("home");
+      navigation.replace("home");
     } else {
       setError("Email o password non valide");
     }
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Image
         source={{
           uri: "https://images.unsplash.com/photo-1498837167922-ddd27525d352",
@@ -76,6 +77,6 @@ export default function AuthScreen({ navigation }: { navigation: any }) {
           <Text style={styles.buttonPrimaryText}>Accedi</Text>
         </Pressable>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

@@ -7,8 +7,9 @@ import DetailsScreen from "./src/screens/DetailsScreen";
 import FavoritesScreen from "./src/screens/FavoritesScreen";
 import * as Linking from "expo-linking";
 import { FavoriteProvider } from "./src/context/FavoriteContext";
-import { AuthProvider } from "./src/context/AuthContext";
+import { AuthProvider, useAuth } from "./src/context/AuthContext";
 import ProfileScreen from "./src/screens/Profile";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,24 +26,43 @@ const linking = {
   },
 };
 
+function AppNavigator() {
+  const { user } = useAuth();
+
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        animation: "slide_from_right",
+        gestureEnabled: true,
+        fullScreenGestureEnabled: true,
+      }}
+    >
+      {user ? (
+        <>
+          <Stack.Screen name="home" component={HomeScreen} />
+          <Stack.Screen name="meals" component={MealsScreen} />
+          <Stack.Screen name="details" component={DetailsScreen} />
+          <Stack.Screen name="favorites" component={FavoritesScreen} />
+          <Stack.Screen name="profile" component={ProfileScreen} />
+        </>
+      ) : (
+        <Stack.Screen name="login" component={AuthScreen} />
+      )}
+    </Stack.Navigator>
+  );
+}
+
 export default function App() {
   return (
-    <AuthProvider>
-      <FavoriteProvider>
-        <NavigationContainer linking={linking}>
-          <Stack.Navigator
-            initialRouteName="login"
-            screenOptions={{ headerShown: false }}
-          >
-            <Stack.Screen name="login" component={AuthScreen} />
-            <Stack.Screen name="home" component={HomeScreen} />
-            <Stack.Screen name="meals" component={MealsScreen} />
-            <Stack.Screen name="details" component={DetailsScreen} />
-            <Stack.Screen name="favorites" component={FavoritesScreen} />
-            <Stack.Screen name="profile" component={ProfileScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </FavoriteProvider>
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <FavoriteProvider>
+          <NavigationContainer linking={linking}>
+            <AppNavigator />
+          </NavigationContainer>
+        </FavoriteProvider>
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }

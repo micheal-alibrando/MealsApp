@@ -1,9 +1,10 @@
 import React from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import Avatar from "../components/Avatar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { styles } from "../style";
+import { styles } from "../theme/styles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileScreen({ navigation }: any) {
   const { user, logout } = useAuth();
@@ -16,7 +17,7 @@ export default function ProfileScreen({ navigation }: any) {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Pressable style={styles.buttonBack} onPress={() => navigation.goBack()}>
         <MaterialIcons name="arrow-back" size={24} />
         <Text style={styles.buttonBackText}>Indietro</Text>
@@ -31,6 +32,6 @@ export default function ProfileScreen({ navigation }: any) {
       <Pressable style={styles.buttonPrimary} onPress={handleLogout}>
         <Text style={styles.buttonPrimaryText}>Logout</Text>
       </Pressable>
-    </View>
+    </SafeAreaView>
   );
 }
