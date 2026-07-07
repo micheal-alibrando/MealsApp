@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { User } from "../context/AuthContext";
 
 export const FAVORITES_KEY = "app:v1:favs";
 export const USER_KEY = "app:v1:user";
@@ -33,9 +34,15 @@ export async function loadUser(): Promise<string | null> {
   }
 }
 
-export async function saveUser(email: string): Promise<void> {
+export async function saveUser(user: User): Promise<void> {
   try {
-    await AsyncStorage.setItem(USER_KEY, JSON.stringify(email));
+    const safeUser: User = {
+      email: user.email,
+      name: user.name,
+      avatarUri: user.avatarUri,
+    };
+
+    await AsyncStorage.setItem(USER_KEY, JSON.stringify(safeUser));
   } catch {}
 }
 
@@ -43,7 +50,7 @@ export async function loadTheme(): Promise<string | null> {
   try {
     const raw = await AsyncStorage.getItem(THEME_KEY);
     if (!raw) return null;
-    return raw;
+    return JSON.parse(raw);
   } catch {
     return null;
   }

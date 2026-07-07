@@ -6,17 +6,16 @@ import {
   ScrollView,
   Image,
   Share,
-  StyleSheet,
 } from "react-native";
 import { getMealById } from "../services/mealsApi";
 import { MaterialIcons } from "@expo/vector-icons";
-import { styles } from "../theme/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Interactive from "../components/Interactive";
 import { useTheme } from "../context/ThemeContext";
+import { createDetailsScreenStyles, styles } from "../theme/styles";
 
 export default function DetailsScreen({ navigation, route }: any) {
-  const id = route.params?.id;
+  const id = route.params?.idMeal ?? route.params?.id;
 
   const [meal, setMeal] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(true);
@@ -52,20 +51,35 @@ export default function DetailsScreen({ navigation, route }: any) {
   }
 
   const { colors } = useTheme();
+  const localStyles = createDetailsScreenStyles(colors);
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.center}>
-        <ActivityIndicator />
-        <Text style={{ color: colors.text }}>Caricamento...</Text>
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+      >
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color={colors.text} />
+          <Text style={{ color: colors.text, marginTop: 12 }}>
+            Caricamento...
+          </Text>
+        </View>
       </SafeAreaView>
     );
   }
 
   if (!meal) {
     return (
-      <SafeAreaView style={styles.center}>
-        <Text style={{ color: colors.text }}>Meal non trovato</Text>
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+      >
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text style={{ color: colors.text }}>Meal non trovato</Text>
+        </View>
       </SafeAreaView>
     );
   }
@@ -74,7 +88,7 @@ export default function DetailsScreen({ navigation, route }: any) {
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <View>
+      <View style={localStyles.headerRow}>
         <Interactive
           style={[
             styles.buttonBack,
@@ -88,14 +102,16 @@ export default function DetailsScreen({ navigation, route }: any) {
           </Text>
         </Interactive>
       </View>
+
       <ScrollView
         contentContainerStyle={localStyles.scrollContent}
         accessibilityLabel="Dettagli piatto"
+        showsVerticalScrollIndicator={false}
       >
-        <View style={[localStyles.imageCard, { backgroundColor: colors.card }]}>
+        <View style={localStyles.imageWrapper}>
           <Image
             source={{ uri: meal.strMealThumb }}
-            style={styles.imageDetails}
+            style={localStyles.image}
           />
 
           <Interactive
@@ -110,57 +126,46 @@ export default function DetailsScreen({ navigation, route }: any) {
               }
             }}
             accessibilityLabel="Condividi ricetta"
-            style={[localStyles.shareButton, { backgroundColor: colors.card }]}
+            style={localStyles.shareButton}
           >
             <MaterialIcons name="share" size={20} color={colors.text} />
           </Interactive>
         </View>
 
-        <Text style={[styles.title, { color: colors.text, fontSize: 20 }]}>
-          {meal.strMeal}
-        </Text>
-        <Text style={[styles.subtitle, { color: colors.inputBorder }]}>
-          {" "}
-          {meal.strArea} • {meal.strCategory}
-        </Text>
+        <View style={localStyles.titleBlock}>
+          <Text style={localStyles.titleText}>{meal.strMeal}</Text>
+          <View style={localStyles.subtitleRow}>
+            <View style={localStyles.badge}>
+              <Text style={localStyles.badgeText}>{meal.strArea}</Text>
+            </View>
+            <View style={localStyles.badge}>
+              <Text style={localStyles.badgeText}>{meal.strCategory}</Text>
+            </View>
+          </View>
+        </View>
 
-        <Text style={[styles.sectionDetails, { color: colors.text }]}>
-          Ingredienti
-        </Text>
-        {getIngredients(meal).map((item, index) => (
-          <Text
-            key={index}
-            style={{ color: colors.text, marginVertical: 4 }}
-            accessibilityLabel={`Ingrediente ${index + 1}`}
-          >
-            • {item}
+        <View style={localStyles.sectionCard}>
+          <Text style={localStyles.sectionTitle}>Ingredienti</Text>
+          {getIngredients(meal).map((item, index) => (
+            <View key={index} style={localStyles.ingredientRow}>
+              <View style={localStyles.bullet} />
+              <Text
+                style={localStyles.ingredientText}
+                accessibilityLabel={`Ingrediente ${index + 1}`}
+              >
+                {item}
+              </Text>
+            </View>
+          ))}
+        </View>
+
+        <View style={localStyles.sectionCard}>
+          <Text style={localStyles.sectionTitle}>Istruzioni</Text>
+          <Text style={localStyles.instructionText}>
+            {meal.strInstructions}
           </Text>
-        ))}
-
-        <Text style={[styles.sectionDetails, { color: colors.text }]}>
-          Istruzioni
-        </Text>
-        <Text style={{ color: colors.text, lineHeight: 20 }}>
-          {meal.strInstructions}
-        </Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-const localStyles = StyleSheet.create({
-  scrollContent: { paddingBottom: 40 },
-  imageCard: {
-    borderRadius: 12,
-    overflow: "hidden",
-    marginBottom: 12,
-  },
-  shareButton: {
-    position: "absolute",
-    right: 12,
-    top: 12,
-    padding: 8,
-    borderRadius: 20,
-    elevation: 3,
-  },
-});

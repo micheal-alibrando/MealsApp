@@ -10,8 +10,8 @@ import { useTheme } from "../context/ThemeContext";
 
 export default function HomeScreen({ navigation }: any) {
   const { user } = useAuth();
-
-  const avatarUri = `https://ui-avatars.com/api/?name=${user?.email}`;
+  const avatarUri =
+    user?.avatarUri || `https://ui-avatars.com/api/?name=${user?.email}`;
 
   const { colors } = useTheme();
 
@@ -31,7 +31,7 @@ export default function HomeScreen({ navigation }: any) {
             Benvenuto 👋
           </Text>
           <Text style={[styles.email, { color: colors.text }]}>
-            {user?.email}
+            {user?.name}
           </Text>
         </View>
         <Interactive

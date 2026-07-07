@@ -74,26 +74,19 @@ export default function FavoritesScreen({ navigation }: { navigation: any }) {
 
   const { colors } = useTheme();
 
-  if (!favoritesLoaded || state.status === "loading") {
-    return (
-      <SafeAreaView
-        style={[styles.container, { backgroundColor: "transparent" }]}
-      >
-        <ActivityIndicator />
-        <Text style={{ color: colors.text }}>Caricamento...</Text>
-      </SafeAreaView>
-    );
-  }
-
-  if (state.status === "error") {
+  if (!favoritesLoaded) {
     return (
       <SafeAreaView
         style={[styles.container, { backgroundColor: colors.background }]}
       >
-        <Text style={{ color: colors.text }}>{state.message}</Text>
-        <Interactive onPress={() => loadFavoriteMeals(favoriteIds)}>
-          <Text style={{ color: colors.text }}>Retry</Text>
-        </Interactive>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color={colors.text} />
+          <Text style={{ color: colors.text, marginTop: 12 }}>
+            Caricamento...
+          </Text>
+        </View>
       </SafeAreaView>
     );
   }
@@ -117,13 +110,57 @@ export default function FavoritesScreen({ navigation }: { navigation: any }) {
 
       <Text style={[styles.title, { color: colors.text }]}>Preferiti</Text>
 
-      {state.items.length === 0 ? (
-        <Text style={{ color: colors.text }}>Nessun preferito</Text>
+      {state.status === "loading" ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color={colors.text} />
+          <Text style={{ color: colors.text, marginTop: 12 }}>
+            Caricamento...
+          </Text>
+        </View>
+      ) : state.status === "error" ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text
+            style={{
+              color: colors.text,
+              textAlign: "center",
+              marginBottom: 16,
+            }}
+          >
+            {state.message}
+          </Text>
+          <Interactive
+            style={[
+              styles.buttonPrimary,
+              { backgroundColor: colors.tagBackground },
+            ]}
+            onPress={() => loadFavoriteMeals(favoriteIds)}
+          >
+            <Text style={[styles.buttonPrimaryText, { color: colors.tagText }]}>
+              Riprova
+            </Text>
+          </Interactive>
+        </View>
+      ) : state.items.length === 0 ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text style={{ color: colors.text }}>Nessun preferito</Text>
+        </View>
       ) : (
         <FlatList
           data={state.items}
           renderItem={({ item }) => (
-            <View style={columns === 1 ? { flex: 1 } : { width: "48%" }}>
+            <View
+              style={
+                columns === 1
+                  ? { flex: 1, marginBottom: 12 }
+                  : { width: "48%", marginBottom: 12 }
+              }
+            >
               <MealCard
                 meal={item}
                 toggleFavorite={toggleFavorite}
@@ -137,7 +174,9 @@ export default function FavoritesScreen({ navigation }: { navigation: any }) {
           keyExtractor={(item) => item.idMeal}
           numColumns={columns}
           columnWrapperStyle={columns === 2 && styles.rowMeals}
-          contentContainerStyle={columns === 2 && styles.listMeals}
+          contentContainerStyle={
+            columns === 2 ? styles.listMeals : { paddingBottom: 16 }
+          }
         />
       )}
     </SafeAreaView>

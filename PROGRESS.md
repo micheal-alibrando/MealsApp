@@ -1,8 +1,8 @@
 # Progress - Italian Meals App
 
-**Studente:** Micheal Alibranod  
+**Studente:** Micheal Alibrando  
 **Repo:** https://github.com/micheal-alibrando/MealsApp
-**Ultimo aggiornamento:** 2026-07-02
+**Ultimo aggiornamento:** 2026-07-07
 
 ## Schermate implementate
 

@@ -19,7 +19,7 @@ export default function AuthScreen({ navigation }: { navigation: any }) {
     const data = await loadUser();
     if (data) {
       navigation.navigate("home");
-      login({ email: data.replaceAll(`"`, "") });
+      login(JSON.parse(data));
     }
   }
 
@@ -35,8 +35,10 @@ export default function AuthScreen({ navigation }: { navigation: any }) {
       return;
     }
 
-    if (validateLogin(email, password)) {
-      login({ email });
+    const user = validateLogin(email, password);
+
+    if (user) {
+      login(user);
       navigation.replace("home");
     } else {
       setError("Email o password non valide");

@@ -15,8 +15,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MealSummary } from "../models/meal";
 import { useWindowDimensions } from "react-native";
 import { breakpoints } from "../theme/global";
-import Error from "../components/Error";
-import Loading from "../components/Loading";
 import Interactive from "../components/Interactive";
 import { useTheme } from "../context/ThemeContext";
 
@@ -81,12 +79,21 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
 
   const { colors } = useTheme();
 
-  if (!favoritesLoaded || state.status === "loading") {
-    return <Loading />;
-  }
-
-  if (state.status === "error") {
-    return <Error error={state.message} onPress={loadMeals} />;
+  if (!favoritesLoaded) {
+    return (
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+      >
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color={colors.text} />
+          <Text style={{ color: colors.text, marginTop: 12 }}>
+            Caricamento...
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
   }
 
   return (
@@ -125,28 +132,75 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
         }}
       />
 
-      <FlatList
-        data={filteredMeals}
-        renderItem={({ item }) => (
-          <View style={columns === 1 ? { flex: 1 } : { width: "48%" }}>
-            <MealCard
-              meal={item}
-              toggleFavorite={toggleFavorite}
-              isFavorite={favoriteIds.includes(item.idMeal)}
-              onPress={() =>
-                navigation.navigate("details", { id: item.idMeal })
-              }
-            />
-          </View>
-        )}
-        keyExtractor={(item) => item.idMeal}
-        numColumns={columns}
-        columnWrapperStyle={columns === 2 && styles.rowMeals}
-        contentContainerStyle={columns === 2 && styles.listMeals}
-        ListEmptyComponent={
+      {state.status === "loading" ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color={colors.text} />
+          <Text style={{ color: colors.text, marginTop: 12 }}>
+            Caricamento...
+          </Text>
+        </View>
+      ) : state.status === "error" ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text
+            style={{
+              color: colors.text,
+              textAlign: "center",
+              marginBottom: 16,
+            }}
+          >
+            {state.message}
+          </Text>
+          <Interactive
+            style={[
+              styles.buttonPrimary,
+              { backgroundColor: colors.tagBackground },
+            ]}
+            onPress={loadMeals}
+          >
+            <Text style={[styles.buttonPrimaryText, { color: colors.tagText }]}>
+              Riprova
+            </Text>
+          </Interactive>
+        </View>
+      ) : filteredMeals.length === 0 ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
           <Text style={{ color: colors.text }}>Nessun risultato</Text>
-        }
-      />
+        </View>
+      ) : (
+        <FlatList
+          data={filteredMeals}
+          renderItem={({ item }) => (
+            <View
+              style={
+                columns === 1
+                  ? { flex: 1, marginBottom: 12 }
+                  : { width: "48%", marginBottom: 12 }
+              }
+            >
+              <MealCard
+                meal={item}
+                toggleFavorite={toggleFavorite}
+                isFavorite={favoriteIds.includes(item.idMeal)}
+                onPress={() =>
+                  navigation.navigate("details", { id: item.idMeal })
+                }
+              />
+            </View>
+          )}
+          keyExtractor={(item) => item.idMeal}
+          numColumns={columns}
+          columnWrapperStyle={columns === 2 && styles.rowMeals}
+          contentContainerStyle={
+            columns === 2 ? styles.listMeals : { paddingBottom: 16 }
+          }
+        />
+      )}
     </SafeAreaView>
   );
 }

@@ -18,11 +18,11 @@ const linking = {
   prefixes: [Linking.createURL("/"), "myapp://"],
   config: {
     screens: {
-      Home: "home",
-      Meals: "meals",
-      Details: "details/:id",
-      Favorites: "favorites",
-      Profile: "profile",
+      home: "home",
+      meals: "meals",
+      details: "meal/:idMeal",
+      favorites: "favorites",
+      profile: "profile",
     },
   },
 };

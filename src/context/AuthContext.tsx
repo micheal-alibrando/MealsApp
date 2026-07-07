@@ -4,11 +4,17 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type User = {
   email: string;
+  name: string;
+  avatarUri: string;
+};
+
+type AuthUser = User & {
+  password?: string;
 };
 
 type AuthContextType = {
   user: User | null;
-  login: (user: User) => void;
+  login: (user: AuthUser) => void;
   logout: () => void;
 };
 
@@ -17,9 +23,15 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const login = (userData: User) => {
-    setUser(userData);
-    saveUser(userData.email);
+  const login = (userData: AuthUser) => {
+    const safeUser: User = {
+      email: userData.email,
+      name: userData.name,
+      avatarUri: userData.avatarUri,
+    };
+
+    setUser(safeUser);
+    saveUser(safeUser);
   };
 
   const logout = async () => {

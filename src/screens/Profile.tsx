@@ -12,7 +12,8 @@ import { useTheme } from "../context/ThemeContext";
 export default function ProfileScreen({ navigation }: any) {
   const { user, logout } = useAuth();
 
-  const avatarUri = `https://ui-avatars.com/api/?name=${user?.email}`;
+  const avatarUri =
+    user?.avatarUri || `https://ui-avatars.com/api/?name=${user?.email}`;
 
   function handleLogout() {
     logout();
@@ -41,9 +42,7 @@ export default function ProfileScreen({ navigation }: any) {
       <View style={styles.boxProfile}>
         <Avatar uri={avatarUri} size={80} />
         <Text style={[styles.title, { color: colors.text }]}>Profilo</Text>
-        <Text style={[styles.email, { color: colors.text }]}>
-          {user?.email}
-        </Text>
+        <Text style={[styles.email, { color: colors.text }]}>{user?.name}</Text>
       </View>
       <View style={{ alignItems: "flex-start", marginTop: 12 }}>
         <ThemeSwitch />

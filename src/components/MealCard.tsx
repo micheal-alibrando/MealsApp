@@ -18,6 +18,9 @@ export default function MealCard({
 }) {
   const { colors } = useTheme();
 
+  const categoryTag = meal?.strCategory?.trim();
+  const tags = categoryTag ? [categoryTag] : [];
+
   return (
     <View style={[styles.cardMeals, { backgroundColor: colors.card }]}>
       <Interactive
@@ -57,18 +60,22 @@ export default function MealCard({
           }}
         />
 
-        <View style={{ flex: 1, gap: 8 }}>
+        <View style={{ flex: 1, gap: 4 }}>
           <Text style={{ fontSize: 18, fontWeight: "600", color: colors.text }}>
             {meal.strMeal}
           </Text>
-          <Text
-            style={[
-              styles.tagMeals,
-              { backgroundColor: colors.tagBackground, color: colors.tagText },
-            ]}
-          >
-            {meal.strArea}
-          </Text>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+            {tags.map((tag) => (
+              <Text
+                key={tag}
+                style={[styles.chip, { backgroundColor: colors.tagBackground }]}
+              >
+                <Text style={[styles.chipText, { color: colors.tagText }]}>
+                  {tag}
+                </Text>
+              </Text>
+            ))}
+          </View>
         </View>
       </Interactive>
     </View>

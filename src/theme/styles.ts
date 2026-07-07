@@ -1,11 +1,5 @@
 import { StyleSheet } from "react-native";
-import {
-  borderRadius,
-  breakpoints,
-  colors,
-  fontSizes,
-  spacing,
-} from "./global";
+import { borderRadius, colors, fontSizes, spacing } from "./global";
 
 export const styles = StyleSheet.create({
   // Global Style
@@ -144,6 +138,18 @@ export const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     alignSelf: "flex-start",
   },
+  chip: {
+    borderRadius: 999,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    alignSelf: "flex-start",
+    marginRight: spacing.sm,
+    marginBottom: spacing.sm,
+  },
+  chipText: {
+    fontSize: fontSizes.sm,
+    fontWeight: "600",
+  },
 
   // Details Screen
   imageDetails: {
@@ -166,6 +172,20 @@ export const styles = StyleSheet.create({
     gap: spacing.md,
   },
   buttonTextDetails: { fontWeight: "600", fontSize: 16 },
+  scrollContent: { paddingBottom: 40 },
+  imageCard: {
+    borderRadius: 12,
+    overflow: "hidden",
+    marginBottom: 12,
+  },
+  shareButton: {
+    position: "absolute",
+    right: 12,
+    top: 12,
+    padding: 8,
+    borderRadius: 20,
+    elevation: 3,
+  },
 
   // Profile Screen
   boxProfile: {
@@ -186,3 +206,101 @@ export const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+
+export const createDetailsScreenStyles = (colors: {
+  inputBorder: string;
+  card: string;
+  text: string;
+  tagBackground: string;
+  tagText: string;
+}) =>
+  StyleSheet.create({
+    headerRow: { marginBottom: spacing.md },
+    scrollContent: { paddingBottom: 40, paddingTop: 4 },
+    imageWrapper: {
+      borderRadius: 20,
+      overflow: "hidden",
+      marginBottom: spacing.lg,
+      borderWidth: 1,
+      borderColor: colors.inputBorder,
+      backgroundColor: colors.card,
+      elevation: 3,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.15,
+      shadowRadius: 10,
+    },
+    image: { width: "100%", height: 300 },
+    shareButton: {
+      position: "absolute",
+      right: 12,
+      top: 12,
+      padding: 10,
+      borderRadius: 999,
+      borderWidth: 1,
+      borderColor: colors.inputBorder,
+      backgroundColor: colors.card,
+      elevation: 4,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 6,
+    },
+    titleBlock: { marginBottom: spacing.md },
+    titleText: { fontSize: 24, marginBottom: spacing.sm, color: colors.text },
+    subtitleRow: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      alignItems: "center",
+      marginBottom: spacing.sm,
+    },
+    badge: {
+      borderRadius: 999,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      marginRight: spacing.sm,
+      marginBottom: spacing.sm,
+      backgroundColor: colors.tagBackground,
+    },
+    badgeText: {
+      fontSize: fontSizes.sm,
+      fontWeight: "600",
+      color: colors.tagText,
+    },
+    sectionCard: {
+      backgroundColor: colors.card,
+      borderRadius: 16,
+      padding: spacing.lg,
+      marginBottom: spacing.md,
+      borderWidth: 1,
+      borderColor: colors.inputBorder,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: "700",
+      marginBottom: spacing.sm,
+      color: colors.text,
+    },
+    ingredientRow: {
+      flexDirection: "row",
+      alignItems: "flex-start",
+      marginBottom: spacing.sm,
+    },
+    bullet: {
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+      backgroundColor: colors.tagBackground,
+      marginTop: 7,
+      marginRight: 8,
+    },
+    ingredientText: {
+      flex: 1,
+      color: colors.text,
+      lineHeight: 20,
+    },
+    instructionText: {
+      color: colors.text,
+      lineHeight: 23,
+    },
+  });
