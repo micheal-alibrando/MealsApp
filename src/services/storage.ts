@@ -50,7 +50,17 @@ export async function loadTheme(): Promise<string | null> {
   try {
     const raw = await AsyncStorage.getItem(THEME_KEY);
     if (!raw) return null;
-    return JSON.parse(raw);
+
+    if (raw === "light" || raw === "dark") {
+      return raw;
+    }
+
+    try {
+      const parsed = JSON.parse(raw);
+      return typeof parsed === "string" ? parsed : null;
+    } catch {
+      return raw;
+    }
   } catch {
     return null;
   }

@@ -154,16 +154,8 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
           >
             {state.message}
           </Text>
-          <Interactive
-            style={[
-              styles.buttonPrimary,
-              { backgroundColor: colors.tagBackground },
-            ]}
-            onPress={loadMeals}
-          >
-            <Text style={[styles.buttonPrimaryText, { color: colors.tagText }]}>
-              Riprova
-            </Text>
+          <Interactive style={[styles.buttonPrimary]} onPress={loadMeals}>
+            <Text style={styles.buttonPrimaryText}>Riprova</Text>
           </Interactive>
         </View>
       ) : filteredMeals.length === 0 ? (

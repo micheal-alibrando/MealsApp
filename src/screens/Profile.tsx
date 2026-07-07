@@ -49,15 +49,10 @@ export default function ProfileScreen({ navigation }: any) {
       </View>
 
       <Interactive
-        style={[
-          styles.buttonPrimary,
-          { backgroundColor: colors.tagBackground, alignSelf: "stretch" },
-        ]}
+        style={[styles.buttonPrimary, { alignSelf: "stretch" }]}
         onPress={handleLogout}
       >
-        <Text style={[styles.buttonPrimaryText, { color: colors.tagText }]}>
-          Logout
-        </Text>
+        <Text style={styles.buttonPrimaryText}>Logout</Text>
       </Interactive>
     </SafeAreaView>
   );

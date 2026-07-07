@@ -133,15 +133,10 @@ export default function FavoritesScreen({ navigation }: { navigation: any }) {
             {state.message}
           </Text>
           <Interactive
-            style={[
-              styles.buttonPrimary,
-              { backgroundColor: colors.tagBackground },
-            ]}
+            style={[styles.buttonPrimary]}
             onPress={() => loadFavoriteMeals(favoriteIds)}
           >
-            <Text style={[styles.buttonPrimaryText, { color: colors.tagText }]}>
-              Riprova
-            </Text>
+            <Text style={styles.buttonPrimaryText}>Riprova</Text>
           </Interactive>
         </View>
       ) : state.items.length === 0 ? (

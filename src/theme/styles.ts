@@ -98,6 +98,38 @@ export const styles = StyleSheet.create({
   email: {
     color: colors.gray[900],
   },
+  homeCard: {
+    alignItems: "center",
+    borderRadius: borderRadius.lg,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.lg,
+    borderWidth: 1,
+  },
+  homeCardContent: {
+    width: "100%",
+  },
+  homeCardTitle: {
+    fontSize: fontSizes.md,
+    fontWeight: "700",
+  },
+  homeCardSubtitle: {
+    opacity: 0.75,
+    marginTop: spacing.xs,
+    fontSize: fontSizes.xs,
+  },
+  homeCardCta: {
+    marginTop: spacing.sm,
+    alignSelf: "flex-start",
+    backgroundColor: colors.primary,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: 999,
+  },
+  homeCardCtaText: {
+    color: "white",
+    fontSize: fontSizes.xs,
+    fontWeight: "600",
+  },
 
   // Login Screen
   titleLogin: {
@@ -123,7 +155,8 @@ export const styles = StyleSheet.create({
   },
   cardMeals: {
     backgroundColor: colors.white[900],
-    borderRadius: borderRadius.sm,
+    borderRadius: borderRadius.lg,
+    borderWidth: 1,
     overflow: "hidden",
     padding: spacing.lg,
     gap: spacing.md,
@@ -149,6 +182,31 @@ export const styles = StyleSheet.create({
   chipText: {
     fontSize: fontSizes.sm,
     fontWeight: "600",
+  },
+  mealCardImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    alignSelf: "center",
+  },
+  mealCardContent: {
+    flex: 1,
+    gap: 12,
+  },
+  mealCardTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  mealCardTagRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  mealCardFavoriteButton: {
+    position: "absolute",
+    top: 15,
+    right: 15,
+    zIndex: 1,
   },
 
   // Details Screen

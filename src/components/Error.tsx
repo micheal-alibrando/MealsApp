@@ -24,16 +24,8 @@ export default function Error({
         >
           {error}
         </Text>
-        <Interactive
-          style={[
-            styles.buttonPrimary,
-            { backgroundColor: colors.tagBackground },
-          ]}
-          onPress={onPress}
-        >
-          <Text style={[styles.buttonPrimaryText, { color: colors.tagText }]}>
-            Riprova
-          </Text>
+        <Interactive style={[styles.buttonPrimary]} onPress={onPress}>
+          <Text style={styles.buttonPrimaryText}>Riprova</Text>
         </Interactive>
       </View>
     </SafeAreaView>

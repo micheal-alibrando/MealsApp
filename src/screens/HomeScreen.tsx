@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import Avatar from "../components/Avatar";
 import { styles } from "../theme/styles";
@@ -59,20 +59,27 @@ export default function HomeScreen({ navigation }: any) {
       </View>
 
       <View style={styles.content}>
-        <Text style={[styles.title, { color: colors.text }]}>
-          Cosa vuoi fare?
-        </Text>
+        <Text style={[styles.title, { color: colors.text }]}>Piatti</Text>
 
         <Interactive
-          style={[
-            styles.buttonSecondary,
-            { backgroundColor: colors.card, borderColor: colors.inputBorder },
-          ]}
           onPress={() => navigation.navigate("meals")}
+          style={[
+            styles.homeCard,
+            {
+              backgroundColor: colors.card,
+              borderColor: colors.inputBorder,
+              opacity: 0.95,
+            },
+          ]}
         >
-          <Text style={[styles.buttonSecondaryText, { color: colors.text }]}>
-            Vai ai piatti
-          </Text>
+          <View style={styles.homeCardContent}>
+            <Text style={[styles.homeCardTitle, { color: colors.text }]}>
+              Piatti Italiani
+            </Text>
+            <Text style={[styles.homeCardSubtitle, { color: colors.text }]}>
+              Scopri pasta, pizza e sapori autentici
+            </Text>
+          </View>
         </Interactive>
       </View>
     </SafeAreaView>

@@ -95,16 +95,8 @@ export default function AuthScreen({ navigation }: { navigation: any }) {
 
         {error && <Text style={styles.error}>{error}</Text>}
 
-        <Interactive
-          style={[
-            styles.buttonPrimary,
-            { backgroundColor: colors.tagBackground },
-          ]}
-          onPress={loginFunction}
-        >
-          <Text style={[styles.buttonPrimaryText, { color: colors.tagText }]}>
-            Accedi
-          </Text>
+        <Interactive style={[styles.buttonPrimary]} onPress={loginFunction}>
+          <Text style={styles.buttonPrimaryText}>Accedi</Text>
         </Interactive>
       </View>
     </SafeAreaView>

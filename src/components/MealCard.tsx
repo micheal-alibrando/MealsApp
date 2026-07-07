@@ -22,14 +22,14 @@ export default function MealCard({
   const tags = categoryTag ? [categoryTag] : [];
 
   return (
-    <View style={[styles.cardMeals, { backgroundColor: colors.card }]}>
+    <View
+      style={[
+        styles.cardMeals,
+        { backgroundColor: colors.card, borderColor: colors.inputBorder },
+      ]}
+    >
       <Interactive
-        style={{
-          position: "absolute",
-          top: 15,
-          right: 15,
-          zIndex: 1,
-        }}
+        style={styles.mealCardFavoriteButton}
         accessibilityLabel={
           isFavorite ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"
         }
@@ -52,19 +52,14 @@ export default function MealCard({
       <Interactive onPress={onPress}>
         <Image
           source={{ uri: meal.strMealThumb }}
-          style={{
-            width: 100,
-            height: 100,
-            borderRadius: 50,
-            alignSelf: "center",
-          }}
+          style={styles.mealCardImage}
         />
 
-        <View style={{ flex: 1, gap: 4 }}>
-          <Text style={{ fontSize: 18, fontWeight: "600", color: colors.text }}>
+        <View style={styles.mealCardContent}>
+          <Text style={[styles.mealCardTitle, { color: colors.text }]}>
             {meal.strMeal}
           </Text>
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+          <View style={styles.mealCardTagRow}>
             {tags.map((tag) => (
               <Text
                 key={tag}
