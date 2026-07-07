@@ -1,50 +1,79 @@
 import React from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import Avatar from "../components/Avatar";
 import { styles } from "../theme/styles";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Interactive from "../components/Interactive";
+import { useTheme } from "../context/ThemeContext";
 
 export default function HomeScreen({ navigation }: any) {
   const { user } = useAuth();
 
   const avatarUri = `https://ui-avatars.com/api/?name=${user?.email}`;
 
+  const { colors } = useTheme();
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <View style={styles.header}>
-        <Pressable onPress={() => navigation.navigate("profile")}>
+        <Interactive
+          accessibilityLabel="Apri profilo"
+          onPress={() => navigation.navigate("profile")}
+        >
           <Avatar uri={avatarUri} size={64} />
-        </Pressable>
+        </Interactive>
         <View>
-          <Text style={styles.welcome}>Benvenuto 👋</Text>
-          <Text style={styles.email}>{user?.email}</Text>
+          <Text style={[styles.welcome, { color: colors.text }]}>
+            Benvenuto 👋
+          </Text>
+          <Text style={[styles.email, { color: colors.text }]}>
+            {user?.email}
+          </Text>
         </View>
-        <Pressable
+        <Interactive
           style={{
             position: "absolute",
             top: 15,
             right: 15,
             zIndex: 1,
           }}
+          accessibilityLabel="Vai ai preferiti"
           onPress={() => navigation.navigate("favorites")}
         >
-          <View style={{ borderRadius: "100%", borderWidth: 1, padding: 8 }}>
-            <MaterialIcons name="favorite" size={24} />
+          <View
+            style={{
+              borderRadius: 100,
+              borderWidth: 1,
+              padding: 8,
+              borderColor: colors.inputBorder,
+              backgroundColor: colors.card,
+            }}
+          >
+            <MaterialIcons name="favorite" size={24} color={colors.text} />
           </View>
-        </Pressable>
+        </Interactive>
       </View>
 
       <View style={styles.content}>
-        <Text style={styles.title}>Cosa vuoi fare?</Text>
+        <Text style={[styles.title, { color: colors.text }]}>
+          Cosa vuoi fare?
+        </Text>
 
-        <Pressable
-          style={styles.buttonSecondary}
+        <Interactive
+          style={[
+            styles.buttonSecondary,
+            { backgroundColor: colors.card, borderColor: colors.inputBorder },
+          ]}
           onPress={() => navigation.navigate("meals")}
         >
-          <Text style={styles.buttonSecondaryText}>Vai ai piatti</Text>
-        </Pressable>
+          <Text style={[styles.buttonSecondaryText, { color: colors.text }]}>
+            Vai ai piatti
+          </Text>
+        </Interactive>
       </View>
     </SafeAreaView>
   );

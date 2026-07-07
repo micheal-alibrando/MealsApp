@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const FAVORITES_KEY = "app:v1:favs";
 export const USER_KEY = "app:v1:user";
+export const THEME_KEY = "app:v1:theme";
 
 export async function loadFavoriteIds(): Promise<string[]> {
   try {
@@ -35,5 +36,21 @@ export async function loadUser(): Promise<string | null> {
 export async function saveUser(email: string): Promise<void> {
   try {
     await AsyncStorage.setItem(USER_KEY, JSON.stringify(email));
+  } catch {}
+}
+
+export async function loadTheme(): Promise<string | null> {
+  try {
+    const raw = await AsyncStorage.getItem(THEME_KEY);
+    if (!raw) return null;
+    return raw;
+  } catch {
+    return null;
+  }
+}
+
+export async function saveTheme(theme: string): Promise<void> {
+  try {
+    await AsyncStorage.setItem(THEME_KEY, theme);
   } catch {}
 }

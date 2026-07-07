@@ -1,7 +1,9 @@
 import React from "react";
-import { View, Image, Text, Pressable } from "react-native";
+import { View, Image, Text } from "react-native";
 import { styles } from "../theme/styles";
 import { MaterialIcons } from "@expo/vector-icons";
+import Interactive from "./Interactive";
+import { useTheme } from "../context/ThemeContext";
 
 export default function MealCard({
   meal,
@@ -14,15 +16,20 @@ export default function MealCard({
   isFavorite: boolean;
   onPress: () => void;
 }) {
+  const { colors } = useTheme();
+
   return (
-    <View style={styles.cardMeals}>
-      <Pressable
+    <View style={[styles.cardMeals, { backgroundColor: colors.card }]}>
+      <Interactive
         style={{
           position: "absolute",
           top: 15,
           right: 15,
           zIndex: 1,
         }}
+        accessibilityLabel={
+          isFavorite ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"
+        }
         onPress={(e) => {
           e.stopPropagation();
           toggleFavorite(meal.idMeal);
@@ -31,11 +38,15 @@ export default function MealCard({
         {isFavorite ? (
           <MaterialIcons name="favorite" size={24} color="red" />
         ) : (
-          <MaterialIcons name="favorite-outline" size={24} color="black" />
+          <MaterialIcons
+            name="favorite-outline"
+            size={24}
+            color={colors.text}
+          />
         )}
-      </Pressable>
+      </Interactive>
 
-      <Pressable onPress={onPress}>
+      <Interactive onPress={onPress}>
         <Image
           source={{ uri: meal.strMealThumb }}
           style={{
@@ -47,12 +58,19 @@ export default function MealCard({
         />
 
         <View style={{ flex: 1, gap: 8 }}>
-          <Text style={{ fontSize: 18, fontWeight: "600" }}>
+          <Text style={{ fontSize: 18, fontWeight: "600", color: colors.text }}>
             {meal.strMeal}
           </Text>
-          <Text style={styles.tagMeals}>{meal.strArea}</Text>
+          <Text
+            style={[
+              styles.tagMeals,
+              { backgroundColor: colors.tagBackground, color: colors.tagText },
+            ]}
+          >
+            {meal.strArea}
+          </Text>
         </View>
-      </Pressable>
+      </Interactive>
     </View>
   );
 }

@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Pressable,
-  Text,
-  View,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
+import { Text, View, FlatList, ActivityIndicator } from "react-native";
 import { getAllMeals } from "../services/mealsApi";
 import MealCard from "../components/MealCard";
 import { styles } from "../theme/styles";
@@ -15,6 +9,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MealSummary } from "../models/meal";
 import { useWindowDimensions } from "react-native";
 import { breakpoints } from "../theme/global";
+import { useTheme } from "../context/ThemeContext";
+import Interactive from "../components/Interactive";
 
 export default function FavoritesScreen({ navigation }: { navigation: any }) {
   const { width } = useWindowDimensions();
@@ -76,37 +72,53 @@ export default function FavoritesScreen({ navigation }: { navigation: any }) {
     });
   }
 
+  const { colors } = useTheme();
+
   if (!favoritesLoaded || state.status === "loading") {
     return (
-      <SafeAreaView>
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: "transparent" }]}
+      >
         <ActivityIndicator />
-        <Text>Caricamento...</Text>
+        <Text style={{ color: colors.text }}>Caricamento...</Text>
       </SafeAreaView>
     );
   }
 
   if (state.status === "error") {
     return (
-      <SafeAreaView>
-        <Text>{state.message}</Text>
-        <Pressable onPress={() => loadFavoriteMeals(favoriteIds)}>
-          <Text>Retry</Text>
-        </Pressable>
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+      >
+        <Text style={{ color: colors.text }}>{state.message}</Text>
+        <Interactive onPress={() => loadFavoriteMeals(favoriteIds)}>
+          <Text style={{ color: colors.text }}>Retry</Text>
+        </Interactive>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Pressable style={styles.buttonBack} onPress={() => navigation.goBack()}>
-        <MaterialIcons name="arrow-back" size={24} />
-        <Text style={styles.buttonBackText}>Indietro</Text>
-      </Pressable>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
+      <Interactive
+        style={[
+          styles.buttonBack,
+          { borderColor: colors.inputBorder, backgroundColor: colors.card },
+        ]}
+        onPress={() => navigation.goBack()}
+      >
+        <MaterialIcons name="arrow-back" size={24} color={colors.text} />
+        <Text style={[styles.buttonBackText, { color: colors.text }]}>
+          Indietro
+        </Text>
+      </Interactive>
 
-      <Text style={styles.title}>Preferiti</Text>
+      <Text style={[styles.title, { color: colors.text }]}>Preferiti</Text>
 
       {state.items.length === 0 ? (
-        <Text>Nessun preferito</Text>
+        <Text style={{ color: colors.text }}>Nessun preferito</Text>
       ) : (
         <FlatList
           data={state.items}

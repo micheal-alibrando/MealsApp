@@ -1,15 +1,18 @@
-import React from 'react'
-import { Image, Text, View } from 'react-native'
+import React from "react";
+import { Image, Text, View } from "react-native";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Avatar({
   uri,
   size = 48,
 }: {
-  uri: string
-  size?: number
+  uri: string;
+  size?: number;
 }) {
-  const [failed, setFailed] = React.useState(false)
-  const radius = size / 2
+  const [failed, setFailed] = React.useState(false);
+  const radius = size / 2;
+
+  const { colors } = useTheme();
 
   return (
     <View
@@ -17,20 +20,26 @@ export default function Avatar({
         width: size,
         height: size,
         borderRadius: radius,
-        overflow: 'hidden',
+        overflow: "hidden",
         borderWidth: 1,
+        borderColor: colors.inputBorder,
+        backgroundColor: colors.card,
       }}
     >
       {failed ? (
-        <Text style={{ textAlign: 'center', lineHeight: size }}>?</Text>
+        <Text
+          style={{ textAlign: "center", lineHeight: size, color: colors.text }}
+        >
+          ?
+        </Text>
       ) : (
         <Image
           source={{ uri }}
           style={{ width: size, height: size }}
           onError={() => setFailed(true)}
-          accessibilityLabel='Avatar utente'
+          accessibilityLabel="Avatar utente"
         />
       )}
     </View>
-  )
+  );
 }

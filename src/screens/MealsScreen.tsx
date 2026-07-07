@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Pressable,
   Text,
   View,
   FlatList,
@@ -18,6 +17,8 @@ import { useWindowDimensions } from "react-native";
 import { breakpoints } from "../theme/global";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
+import Interactive from "../components/Interactive";
+import { useTheme } from "../context/ThemeContext";
 
 export default function MealsScreen({ navigation }: { navigation: any }) {
   const { width } = useWindowDimensions();
@@ -78,6 +79,8 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
     meal.strMeal.toLowerCase().includes(search.toLowerCase()),
   );
 
+  const { colors } = useTheme();
+
   if (!favoritesLoaded || state.status === "loading") {
     return <Loading />;
   }
@@ -87,13 +90,25 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Pressable style={styles.buttonBack} onPress={() => navigation.goBack()}>
-        <MaterialIcons name="arrow-back" size={24} />
-        <Text style={styles.buttonBackText}>Indietro</Text>
-      </Pressable>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
+      <Interactive
+        style={[
+          styles.buttonBack,
+          { borderColor: colors.inputBorder, backgroundColor: colors.card },
+        ]}
+        onPress={() => navigation.goBack()}
+      >
+        <MaterialIcons name="arrow-back" size={24} color={colors.text} />
+        <Text style={[styles.buttonBackText, { color: colors.text }]}>
+          Indietro
+        </Text>
+      </Interactive>
 
-      <Text style={styles.title}>Piatti Italiani</Text>
+      <Text style={[styles.title, { color: colors.text }]}>
+        Piatti Italiani
+      </Text>
 
       <TextInput
         placeholder="Cerca un piatto..."
@@ -101,10 +116,12 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
         onChangeText={setSearch}
         style={{
           borderWidth: 1,
-          borderColor: "#ccc",
+          borderColor: colors.inputBorder || "#ccc",
           borderRadius: 10,
           padding: 10,
           marginBottom: 12,
+          backgroundColor: colors.input,
+          color: colors.text,
         }}
       />
 
@@ -126,7 +143,9 @@ export default function MealsScreen({ navigation }: { navigation: any }) {
         numColumns={columns}
         columnWrapperStyle={columns === 2 && styles.rowMeals}
         contentContainerStyle={columns === 2 && styles.listMeals}
-        ListEmptyComponent={<Text>Nessun risultato</Text>}
+        ListEmptyComponent={
+          <Text style={{ color: colors.text }}>Nessun risultato</Text>
+        }
       />
     </SafeAreaView>
   );

@@ -1,10 +1,12 @@
 import React from "react";
-import { View, Text, TextInput, Pressable, Image } from "react-native";
+import { View, Text, TextInput, Image } from "react-native";
 import { validateLogin } from "../services/auth";
 import { useAuth } from "../context/AuthContext";
 import { loadUser } from "../services/storage";
 import { styles } from "../theme/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Interactive from "../components/Interactive";
+import { useTheme } from "../context/ThemeContext";
 
 export default function AuthScreen({ navigation }: { navigation: any }) {
   const { login } = useAuth();
@@ -41,8 +43,12 @@ export default function AuthScreen({ navigation }: { navigation: any }) {
     }
   }
 
+  const { colors } = useTheme();
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <Image
         source={{
           uri: "https://images.unsplash.com/photo-1498837167922-ddd27525d352",
@@ -50,14 +56,21 @@ export default function AuthScreen({ navigation }: { navigation: any }) {
         style={styles.imageLogin}
       />
 
-      <Text style={styles.titleLogin}>Meals App</Text>
+      <Text style={[styles.titleLogin, { color: colors.text }]}>Meals App</Text>
 
       <View style={styles.form}>
         <TextInput
           placeholder="Email"
           value={email}
           onChangeText={setEmail}
-          style={styles.input}
+          style={[
+            styles.input,
+            {
+              backgroundColor: colors.input,
+              borderColor: colors.inputBorder,
+              color: colors.text,
+            },
+          ]}
           autoCapitalize="none"
           placeholderTextColor="#999"
         />
@@ -67,15 +80,30 @@ export default function AuthScreen({ navigation }: { navigation: any }) {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
-          style={styles.input}
+          style={[
+            styles.input,
+            {
+              backgroundColor: colors.input,
+              borderColor: colors.inputBorder,
+              color: colors.text,
+            },
+          ]}
           placeholderTextColor="#999"
         />
 
         {error && <Text style={styles.error}>{error}</Text>}
 
-        <Pressable style={styles.buttonPrimary} onPress={loginFunction}>
-          <Text style={styles.buttonPrimaryText}>Accedi</Text>
-        </Pressable>
+        <Interactive
+          style={[
+            styles.buttonPrimary,
+            { backgroundColor: colors.tagBackground },
+          ]}
+          onPress={loginFunction}
+        >
+          <Text style={[styles.buttonPrimaryText, { color: colors.tagText }]}>
+            Accedi
+          </Text>
+        </Interactive>
       </View>
     </SafeAreaView>
   );

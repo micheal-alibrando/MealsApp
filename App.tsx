@@ -8,6 +8,7 @@ import FavoritesScreen from "./src/screens/FavoritesScreen";
 import * as Linking from "expo-linking";
 import { FavoriteProvider } from "./src/context/FavoriteContext";
 import { AuthProvider, useAuth } from "./src/context/AuthContext";
+import { ThemeProvider } from "./src/context/ThemeContext";
 import ProfileScreen from "./src/screens/Profile";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -58,9 +59,11 @@ export default function App() {
     <SafeAreaProvider>
       <AuthProvider>
         <FavoriteProvider>
-          <NavigationContainer linking={linking}>
-            <AppNavigator />
-          </NavigationContainer>
+          <ThemeProvider>
+            <NavigationContainer linking={linking}>
+              <AppNavigator />
+            </NavigationContainer>
+          </ThemeProvider>
         </FavoriteProvider>
       </AuthProvider>
     </SafeAreaProvider>
